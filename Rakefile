@@ -1,16 +1,13 @@
 OWNER = 'b08x'.freeze
 ALL_IMAGES = %w[
-  minimal
-  llamaindex
   nlp
-  full
 ].each(&:freeze).freeze
-
 
 BASE_IMAGES = ALL_IMAGES.map do |name|
   base_image_name, base_image_tag = nil
   IO.foreach("#{name}/Dockerfile") do |line|
     break if base_image_name && base_image_tag
+
     case line
     when /BASE_IMAGE_TAG=(\h+)/
       base_image_tag = Regexp.last_match(1)
@@ -53,7 +50,7 @@ ALL_IMAGES.each do |image|
   end
 
   desc "Make #{OWNER}/#{image} image"
-  task "make/#{image}" do  
+  task "make/#{image}" do
     sh "docker build -f #{image}/Dockerfile #{DOCKER_FLAGS} --rm --force-rm -t #{OWNER}/notebook-#{image}:latest ."
   end
 
