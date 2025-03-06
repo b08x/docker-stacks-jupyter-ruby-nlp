@@ -110,7 +110,7 @@ RUN gem install --no-document \
     yaml
 
 # Stage 2: Final image
-FROM quay.io/jupyter/scipy-notebook:${BASE_IMAGE_TAG}
+FROM quay.io/jupyter/minimal-notebook:${BASE_IMAGE_TAG}
 
 USER root
 
