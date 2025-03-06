@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   nlp-notebook:
     image: b08x/notebook-nlp:latest
