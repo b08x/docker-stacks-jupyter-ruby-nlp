@@ -7,7 +7,7 @@ services:
       context: .
       dockerfile: nlp/Dockerfile
     volumes:
-      - $HOME/Storage:/home/jovyan/Library:ro
+      - $HOME/Documents:/home/jovyan/Library:ro
       - $HOME/Workspace:/home/jovyan/Workspace
     user: 1000:1000
     env_file:
