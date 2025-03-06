@@ -184,29 +184,24 @@ RUN rm -f /home/$NB_USER/.wget-hsts && \
 
 USER $NB_UID
 
-RUN mamba update --all --yes && \
-    mamba clean --all -f -y && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
-
-RUN echo "[[ -f ~/.env ]] && source ~/.env" >> $HOME/.bashrc && \
-    echo "gem: --user-install --no-document" >> $HOME/.gemrc
-
 ENV PATH="/home/${NB_USER}/.local/share/gem/ruby/3.2.0/bin:$HOME/.local/bin:$PATH"
 ENV GEM_HOME="/home/${NB_USER}/.local/share/gem/ruby/3.2.0"
 
-# Install Python packages
-RUN mamba install --yes \
-    'huggingface_hub' \
-    'nbconvert' 'pillow' 'pydantic' 'pyvis' && \
-    mamba clean --all -f -y && fix-permissions "${CONDA_DIR}" && fix-permissions "/home/${NB_USER}" && \
+RUN mamba update --all --yes && \
+    mamba install --yes 'nbconvert' && \
+    mamba clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}" && \
     pip install  'spacy' 'spacy-layout' 'docling' \
     'google-generativeai' 'chromadb' 'Markdown' 'pyyaml' && \
     python3 -m spacy download en_core_web_trf && \
     python3 -m spacy download en_core_web_sm && \
     python -c "import sys, importlib.util as util; 1 if util.find_spec('nltk') else sys.exit(); import nltk; nltk.download('punkt')"
 
-# To fix: qt.qpa.xcb could not connect to display
+RUN echo "[[ -f ~/.env ]] && source ~/.env" >> $HOME/.bashrc && \
+    echo "gem: --user-install --no-document" >> $HOME/.gemrc
+
+    # To fix: qt.qpa.xcb could not connect to display
 ENV QT_QPA_PLATFORM offscreen
 
 RUN iruby register --force
